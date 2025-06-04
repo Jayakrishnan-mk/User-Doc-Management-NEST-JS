@@ -9,7 +9,7 @@ export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   async validateUser(username: string, pass: string): Promise<User | null> {
     const user = await this.userService.findByUsernameWithPassword(username);
@@ -31,8 +31,12 @@ export class AuthService {
       throw new UnauthorizedException('Password is required');
     }
     const hashedPassword = await bcrypt.hash(userData.password, 10);
-    const user = await this.userService.create({ ...userData, password: hashedPassword }) as User;
+    const user = (await this.userService.create({
+      ...userData,
+      password: hashedPassword,
+    })) as User;
     // Remove password before returning
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...result } = user;
     return result;
   }

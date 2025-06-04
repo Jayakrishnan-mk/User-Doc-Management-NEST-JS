@@ -8,16 +8,18 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) { }
+  ) {}
 
   async findAll(): Promise<Partial<User>[]> {
     const users = await this.userRepository.find();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return users.map(({ password, ...rest }) => rest);
   }
 
   async findById(id: number): Promise<Partial<User> | null> {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) return null;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...rest } = user;
     return rest;
   }
@@ -25,6 +27,7 @@ export class UserService {
   async findByUsername(username: string): Promise<Partial<User> | null> {
     const user = await this.userRepository.findOneBy({ username });
     if (!user) return null;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...rest } = user;
     return rest;
   }
@@ -37,13 +40,16 @@ export class UserService {
   async create(user: Partial<User>): Promise<Partial<User>> {
     // Check if username already exists
     if (user.username) {
-      const existing = await this.userRepository.findOneBy({ username: user.username });
+      const existing = await this.userRepository.findOneBy({
+        username: user.username,
+      });
       if (existing) {
         throw new BadRequestException('Username already exists');
       }
     }
     const newUser = this.userRepository.create(user);
     const savedUser = await this.userRepository.save(newUser);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...rest } = savedUser;
     return rest;
   }
