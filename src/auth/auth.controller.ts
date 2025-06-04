@@ -8,7 +8,8 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
-  ) {}
+    // eslint-disable-next-line prettier/prettier
+  ) { }
 
   @Post('register')
   async register(
@@ -30,6 +31,7 @@ export class AuthController {
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
+
     return this.authService.login(user);
   }
 }

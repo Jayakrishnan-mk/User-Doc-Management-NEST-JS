@@ -15,23 +15,23 @@ import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @UseGuards(AuthGuard('jwt'))
   @Get()
-  findAll(): Promise<User[]> {
+  findAll(): Promise<Partial<User>[]> {
     return this.userService.findAll();
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Get(':id')
-  findById(@Param('id') id: string): Promise<User | null> {
+  findById(@Param('id') id: string): Promise<Partial<User> | null> {
     return this.userService.findById(Number(id));
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  create(@Body() user: Partial<User>): Promise<User> {
+  create(@Body() user: Partial<User>): Promise<Partial<User>> {
     return this.userService.create(user);
   }
 
@@ -40,7 +40,7 @@ export class UserController {
   update(
     @Param('id') id: string,
     @Body() user: Partial<User>,
-  ): Promise<User | null> {
+  ): Promise<Partial<User> | null> {
     return this.userService.update(Number(id), user);
   }
 
