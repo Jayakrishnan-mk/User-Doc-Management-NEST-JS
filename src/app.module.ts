@@ -19,7 +19,7 @@ import { IngestionModule } from './ingestion/ingestion.module';
       password: process.env.DB_PASSWORD!,
       database: process.env.DB_DATABASE!,
       autoLoadEntities: true,
-      synchronize: true, // Set to false in production
+      synchronize: false, // Set to false in production
     }),
     AuthModule,
     UserModule,
