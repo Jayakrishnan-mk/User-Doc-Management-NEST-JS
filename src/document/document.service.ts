@@ -69,4 +69,8 @@ export class DocumentService {
       throw new ForbiddenException('Not your document');
     await this.documentRepository.delete(id);
   }
+
+  async delete(id: number) {
+    return this.documentRepository.delete(id);
+  }
 }
