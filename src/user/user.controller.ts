@@ -13,6 +13,9 @@ import { UserService } from './user.service';
 import { User } from './user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
+import { UserRole } from './user.entity';
 
 @Controller('users')
 export class UserController {
@@ -45,7 +48,8 @@ export class UserController {
     return updated;
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(UserRole.ADMIN)
   @Delete(':id')
   async remove(
     @Param('id', ParseIntPipe) id: number,
