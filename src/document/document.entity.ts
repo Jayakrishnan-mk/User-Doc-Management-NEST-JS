@@ -30,4 +30,7 @@ export class Document {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column({ type: 'varchar', nullable: true, default: 'pending' })
+  ingestionStatus?: string;
 }

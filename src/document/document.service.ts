@@ -46,14 +46,14 @@ export class DocumentService {
   async update(
     id: number,
     docData: Partial<Document>,
-    user: User,
+    user?: User,
   ): Promise<Partial<Document> | null> {
     const doc = await this.documentRepository.findOne({
       where: { id },
       relations: ['owner'],
     });
     if (!doc) return null;
-    if (doc.owner.id !== user.id)
+    if (user && doc.owner.id !== user.id)
       throw new ForbiddenException('Not your document');
     await this.documentRepository.update(id, docData);
     return this.findById(id);
