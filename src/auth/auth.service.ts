@@ -30,7 +30,7 @@ export class AuthService {
     if (!userData.password) {
       throw new UnauthorizedException('Password is required');
     }
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    const hashedPassword = await bcrypt.hash(userData.password, 10); // 10 -  salt rounds.
     const user = (await this.userService.create({
       ...userData,
       password: hashedPassword,
