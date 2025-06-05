@@ -9,7 +9,7 @@ A production-ready, modular NestJS backend for user and document management, fea
 - JWT authentication and role-based access (admin/editor/viewer)
 - PostgreSQL integration via TypeORM
 - File upload, document ingestion (OCR/PDF parsing), and status tracking
-- VirusTotal integration (optional)
+- VirusTotal integration
 - Comprehensive unit and e2e tests
 
 ## Features
@@ -78,6 +78,7 @@ npm run start:dev
 ### Users
 
 - `GET /users/:id` — Get user profile (auth required)
+- `GET /users` — List users (auth required)
 - `PUT /users/:id` — Update user (self or admin)
 - `PATCH /users/:id/role` — Update user role (admin only)
 - `DELETE /users/:id` — Delete user (admin only)
@@ -110,7 +111,7 @@ Uploaded files are stored in `/uploads`. File URLs are returned in API responses
 
 - Supports OCR (images) and PDF parsing
 - Status tracked per document
-- VirusTotal scan (optional, see `.env`)
+- VirusTotal scan
 
 ## Testing
 
