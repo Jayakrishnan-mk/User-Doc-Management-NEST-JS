@@ -63,13 +63,13 @@ export class DocumentController {
 
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
-  async remove(
+  async delete(
     @Param('id', ParseIntPipe) id: number,
     @Request() req: ExpressRequest,
   ) {
     if (!req.user) throw new UnauthorizedException();
     await this.documentService.remove(id, req.user as User);
-    return { message: 'Document deleted successfully' };
+    return { message: 'Document deleted' };
   }
 
   @UseGuards(AuthGuard('jwt'))
