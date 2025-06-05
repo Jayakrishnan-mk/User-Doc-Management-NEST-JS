@@ -24,6 +24,7 @@ A production-ready, modular NestJS backend for user and document management, fea
 
 ### Prerequisites
 
+- Docker and Docker Compose
 - Node.js (v18+ recommended)
 - PostgreSQL
 
@@ -35,26 +36,42 @@ npm install
 
 ### Environment Setup
 
-Create a `.env` file in the project root:
-
-```
-DATABASE_URL=postgres://user:password@localhost:5432/dbname
-JWT_SECRET=your_jwt_secret
-OCR_SPACE_API_KEY=your_ocr_space_api_key
-```
-
-### Database Migration
-
-If using TypeORM migrations, run:
+Create a `.env` file in the project root from the example:
 
 ```sh
-npm run typeorm migration:run
+cp .env.example .env
 ```
 
-### Running the App
+Edit `.env` and update the following values:
+PORT=3000
+
+- DB_HOST
+- DB_PORT
+- DB_USERNAME
+- DB_PASSWORD
+- DB_DATABASE
+- JWT_SECRET
+- OCR_SPACE_API_KEY
+- VIRUSTOTAL_API_KEY
+
+### Running the App (Local Development)
 
 ```sh
 npm run start:dev
+```
+
+### Running the App (Docker)
+
+1. Build and run containers:
+```sh
+docker-compose up --build
+```
+
+2. Access the application at http://localhost:3000
+
+3. To stop the containers:
+```sh
+docker-compose down
 ```
 
 ### Running Tests
@@ -66,6 +83,41 @@ npm run start:dev
 - **e2e tests:**
   ```sh
   npm run test:e2e
+  ```
+
+### Database Migration
+
+If using TypeORM migrations:
+
+```sh
+npm run typeorm migration:run
+```
+
+### Docker Commands
+
+- Build and run containers:
+  ```sh
+  docker-compose up --build
+  ```
+- Run in detached mode:
+  ```sh
+  docker-compose up -d
+  ```
+- Stop containers:
+  ```sh
+  docker-compose down
+  ```
+- View logs:
+  ```sh
+  docker-compose logs -f
+  ```
+- Run migrations in Docker:
+  ```sh
+  docker-compose exec app npm run typeorm migration:run
+  ```
+- Run tests in Docker:
+  ```sh
+  docker-compose exec app npm run test
   ```
 
 ## API Overview
