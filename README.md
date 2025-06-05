@@ -1,4 +1,4 @@
-# Modular NestJS Backend : User and Document Management
+# User and Document Management
 
 ## Overview
 
