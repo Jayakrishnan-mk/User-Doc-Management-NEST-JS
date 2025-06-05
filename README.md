@@ -123,6 +123,11 @@ Uploaded files are stored in `/uploads`. File URLs are returned in API responses
 - Dockerfile and docker-compose recommended for production
 - Ensure environment variables are set in production
 
+## Postman Collection
+
+- [Online Postman Workspace](https://postman.co/workspace/My-Workspace~392b206e-087a-4088-8de3-b885ca4343fa/collection/27063930-dd3c579f-c9ed-4d72-bdbc-ae6578ad841e?action=share&creator=27063930&active-environment=27063930-e072c2cc-0bbd-48d5-9a93-8cc1f0aa9ecd)
+- [Download Postman Collection (JSON)](./postman_collection.json)
+
 ---
 
 **For more details, see code comments and tests.**
