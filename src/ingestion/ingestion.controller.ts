@@ -12,6 +12,7 @@ import axios from 'axios';
 import * as fs from 'fs';
 import { DocumentService } from '../document/document.service';
 import * as FormData from 'form-data';
+import * as pdfParse from 'pdf-parse';
 
 @Controller('ingestion')
 @UseGuards(AuthGuard('jwt'))
@@ -21,7 +22,6 @@ export class IngestionController {
   // Trigger ingestion for a document by ID
   @Post('trigger')
   async triggerIngestion(@Body() body: { documentId: number }) {
-    // Set status to processing in DB
     await this.documentService.update(body.documentId, {
       ingestionStatus: 'processing',
     });
@@ -41,10 +41,26 @@ export class IngestionController {
       });
       return { error: 'File not found for document' };
     }
+    // If PDF, use pdf-parse for full text extraction
+    if (filePath.toLowerCase().endsWith('.pdf')) {
+      try {
+        const dataBuffer = fs.readFileSync(filePath);
+        const pdfData = await pdfParse(dataBuffer);
+        await this.documentService.update(body.documentId, {
+          ingestionStatus: 'complete',
+        });
+        return { message: 'PDF parsed', text: pdfData.text };
+      } catch (err) {
+        await this.documentService.update(body.documentId, {
+          ingestionStatus: 'failed',
+        });
+        return { error: 'PDF parsing failed', details: err.message };
+      }
+    }
+    // Otherwise, use OCR.Space for images (Optical Character Recognition)
     const form = new FormData();
     form.append('file', fs.createReadStream(filePath));
     form.append('apikey', process.env.OCR_SPACE_API_KEY);
-    // OCR request to OCR.Space - Optical Character Recognition
     try {
       const response = await axios.post(
         'https://api.ocr.space/parse/image',
