@@ -1,4 +1,4 @@
-# jkTech-task: Modular NestJS Backend
+# Modular NestJS Backend : User and Document Management
 
 ## Overview
 
