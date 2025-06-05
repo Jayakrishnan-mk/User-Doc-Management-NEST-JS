@@ -2,16 +2,17 @@ import {
   Controller,
   Get,
   Param,
-  Post,
-  Body,
   Put,
   Delete,
   UseGuards,
-  Request,
+  Body,
+  ParseIntPipe,
+  NotFoundException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UserController {
@@ -25,28 +26,33 @@ export class UserController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get(':id')
-  findById(@Param('id') id: string): Promise<Partial<User> | null> {
-    return this.userService.findById(Number(id));
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Post()
-  create(@Body() user: Partial<User>): Promise<Partial<User>> {
-    return this.userService.create(user);
+  async findById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Partial<User>> {
+    const user = await this.userService.findById(id);
+    if (!user) throw new NotFoundException('User not found');
+    return user;
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Put(':id')
-  update(
-    @Param('id') id: string,
-    @Body() user: Partial<User>,
-  ): Promise<Partial<User> | null> {
-    return this.userService.update(Number(id), user);
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() user: UpdateUserDto,
+  ): Promise<Partial<User>> {
+    const updated = await this.userService.update(id, user);
+    if (!updated) throw new NotFoundException('User not found');
+    return updated;
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<void> {
-    return this.userService.remove(Number(id));
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<{ message: string }> {
+    const user = await this.userService.findById(id);
+    if (!user) throw new NotFoundException('User not found');
+    await this.userService.remove(id);
+    return { message: 'User deleted successfully' };
   }
 }

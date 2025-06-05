@@ -14,6 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
+  // automatically by Passport - when a request with a JWT is received
   async validate(payload: any): Promise<Partial<User> | null> {
     return this.userService.findById(payload.sub);
   }
