@@ -1,13 +1,5 @@
-# Use official Node.js image for builder stage with security updates
-FROM node:18-alpine as builder
-
-# Update and install security updates
-RUN apk add --no-cache --virtual .build-deps \
-    build-base \
-    python3 \
-    && npm install --global npm@latest \
-    && npm audit fix --force \
-    && apk del .build-deps
+# Use official Node.js image
+FROM node:18-alpine
 
 WORKDIR /app
 
@@ -21,26 +13,8 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Use a smaller production image with security updates
-FROM node:18-alpine
-
-# Update and install security updates
-RUN apk add --no-cache --virtual .build-deps \
-    build-base \
-    python3 \
-    && npm install --global npm@latest \
-    && npm audit fix --force \
-    && apk del .build-deps
-
-WORKDIR /app
-
-# Install production dependencies
-COPY package*.json ./
-RUN npm install --production
-
-# Copy built files from builder stage
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
+# Remove development dependencies and install only production dependencies
+RUN npm prune --production
 
 # Expose the app port
 EXPOSE 3000
