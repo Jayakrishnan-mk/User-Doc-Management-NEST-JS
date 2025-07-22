@@ -1,4 +1,4 @@
-# User and Document Management - Nest Js.
+# User and Document Management - Nest Js
 
 ## Overview
 
